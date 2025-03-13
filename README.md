@@ -8,6 +8,7 @@ In the project directory, you can run:
 
 1. Install npm packages with `npm install`
 2. Install axios with `npm install axios`
+3. Install react-router-dom with `npm install react-router-dom`
 
 ### `npm start`
 ### `npm run start:local` to use the environment "local"

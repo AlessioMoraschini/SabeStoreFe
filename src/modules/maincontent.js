@@ -3,7 +3,7 @@ import React from 'react';
 const MainContent = () => {
   return (
     <div className="main-content">
-      {/* Aggiungi il contenuto principale */}
+      Welcome to the home page of SabeStore :D
     </div>
   );
 };
