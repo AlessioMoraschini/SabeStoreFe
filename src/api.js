@@ -13,5 +13,16 @@ export const login = async (username, password) => {
             'Content-Type': 'application/json'
         }
     });
-  return response.headers['authorization'];
+  return response;
+};
+
+export const verifyMail = async (mail) => {
+    const response = await axios.post(`${SABE_STORE_ROOT_URL}/user/resendVerificationMail`, {
+        mail: mail
+    }, {
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    });
+  return response.status;
 };
