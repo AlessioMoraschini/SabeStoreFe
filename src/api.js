@@ -17,12 +17,28 @@ export const login = async (username, password) => {
 };
 
 export const verifyMail = async (mail) => {
-    const response = await axios.post(`${SABE_STORE_ROOT_URL}/user/resendVerificationMail`, {
+    const response = await axios.get(`${SABE_STORE_ROOT_URL}/user/resendVerificationMail`, {
+    params: {
         mail: mail
+    },
+    headers: {
+        'Content-Type': 'application/json'
+    }
+  });
+  return response.status;
+};
+
+// TODO define and link to user creation endpoint with all the fields
+export const createUser = async (name, surname, mail, password) => {
+    const response = await axios.post(`${SABE_STORE_ROOT_URL}/user/createUser`, {
+        mail: mail,
+        password: password,
+        name: name,
+        surname: surname
     }, {
         headers: {
             'Content-Type': 'application/json'
         }
     });
-  return response.status;
+  return response;
 };

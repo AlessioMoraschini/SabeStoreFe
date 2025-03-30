@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { login } from '../api';
+import { verifyMail } from '../api';
 import { useNavigate } from 'react-router-dom';
 
 import '../styles/login.css';
@@ -24,8 +25,7 @@ const LoginPage = ({ onLoginSuccess }) => {
       localStorage.setItem('token', token);
       // Ricarica la home page o reindirizza
       console.log("Succesful login for " + email + " - Token received: " + token);
-      setSuccess('Valid login :)');
-      setError('');
+      onSuccess('Valid login :)');
 
       axios.defaults.headers.common['Authorization'] = token;
       onLoginSuccess();
@@ -42,31 +42,33 @@ const LoginPage = ({ onLoginSuccess }) => {
     }
   };
 
-  function onError(message){
-    setError(message);
-    console.error(message);
-    setSuccess('');
-  }
-
   const handleResendVerificationMail = async (e) => {
       e.preventDefault();
+      if (!email || email.trim() === '') {
+        onError('Email is blank or undefined');
+      }
       try {
-        const token = await login(email, password);
-        localStorage.setItem('token', token);
-        // Ricarica la home page o reindirizza
-        console.log("Succesful login for " + email + " - Token received: " + token);
-        setSuccess('Valid login :)');
-        setError('');
-
-        axios.defaults.headers.common['Authorization'] = token;
-        onLoginSuccess();
-        navigate('/homepage');
-
+        await verifyMail(email);
+        onSuccess('Mail sent :)');
       } catch (err) {
-        setError('Login failed, please try again.');
-        setSuccess('');
+        onError('Cannot send email, an error occurred. ' + err);
       }
     };
+
+    const signup = async (e) =>{
+        e.preventDefault();
+        navigate('/signUp');
+    }
+    function onError(message){
+        setError(message);
+        console.error(message);
+        setSuccess('');
+    }
+    function onSuccess(message){
+        setSuccess(message);
+        console.info(message);
+        setError('');
+    }
 
   return (
     <div className="login-container default-background">
@@ -91,8 +93,13 @@ const LoginPage = ({ onLoginSuccess }) => {
         {error && <div style={{ color: 'red' }}>{error}</div>}
         {success && <div style={{ color: 'green' }}>{success}</div>}
         <button type="submit" className="login-button">Login</button>
-        <div>
-            <a href={handleResendVerificationMail}>Resend verification mail</a>
+        <div className="anchor-container">
+          <div>
+            <a href="#" onClick={handleResendVerificationMail}>Resend verification mail</a>
+          </div>
+          <div>
+            <a href="#" onClick={signup}>Sing up</a>
+          </div>
         </div>
       </form>
     </div>
